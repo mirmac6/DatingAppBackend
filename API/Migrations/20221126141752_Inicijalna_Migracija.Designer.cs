@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221123224308_PrvaMigracija")]
-    partial class PrvaMigracija
+    [Migration("20221126141752_Inicijalna_Migracija")]
+    partial class Inicijalna_Migracija
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

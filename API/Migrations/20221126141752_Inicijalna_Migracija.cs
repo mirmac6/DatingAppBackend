@@ -2,7 +2,7 @@
 
 namespace API.Migrations
 {
-    public partial class PrvaMigracija : Migration
+    public partial class Inicijalna_Migracija : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
