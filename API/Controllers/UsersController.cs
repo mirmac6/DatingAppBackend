@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -26,7 +27,7 @@ namespace API.Controllers
         {
             return await _context.Users.ToListAsync();
         }
-        [Authorize]
+   
         [HttpGet("{id}")]
         public async Task<ActionResult<AppUser>> GetUser(int id)
         {
