@@ -17,12 +17,13 @@ namespace API.Data
 
         public DbSet<AppUser> Users { get; set; }
         public DbSet<UserLike> Likes { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AppUser>().HasData(
                 new AppUser() { Id = 1, UserName = "lisa", PasswordHash = new HMACSHA512().ComputeHash(Encoding.UTF8.GetBytes("1234")), PasswordSalt = new HMACSHA512().Key },
-                new AppUser() { Id = 2, UserName = "karen", PasswordHash = new HMACSHA512().ComputeHash(Encoding.UTF8.GetBytes("1234")), PasswordSalt = new HMACSHA512().Key  },
+                new AppUser() { Id = 2, UserName = "karen", PasswordHash = new HMACSHA512().ComputeHash(Encoding.UTF8.GetBytes("1234")), PasswordSalt = new HMACSHA512().Key },
                 new AppUser() { Id = 3, UserName = "margo", PasswordHash = new HMACSHA512().ComputeHash(Encoding.UTF8.GetBytes("1234")), PasswordSalt = new HMACSHA512().Key },
                 new AppUser() { Id = 4, UserName = "lois", PasswordHash = new HMACSHA512().ComputeHash(Encoding.UTF8.GetBytes("1234")), PasswordSalt = new HMACSHA512().Key },
                 new AppUser() { Id = 5, UserName = "ruthie", PasswordHash = new HMACSHA512().ComputeHash(Encoding.UTF8.GetBytes("1234")), PasswordSalt = new HMACSHA512().Key },
@@ -46,6 +47,16 @@ namespace API.Data
                 .WithMany(l => l.LikedByUsers)
                 .HasForeignKey(s => s.TargetUserId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(u => u.Recipient)
+                .WithMany(m => m.MessageReceived)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(u => u.Sender)
+                .WithMany(m => m.MessageSent)
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }
