@@ -1,4 +1,6 @@
 ﻿using API.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,30 +11,33 @@ using System.Threading.Tasks;
 
 namespace API.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<AppUser, AppRole, int, IdentityUserClaim<int>,
+        AppUserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>,
+        IdentityUserToken<int>>
     {
         public DataContext(DbContextOptions options) : base(options)
         {
         }
 
-        public DbSet<AppUser> Users { get; set; }
         public DbSet<UserLike> Likes { get; set; }
         public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AppUser>().HasData(
-                new AppUser() { Id = 1, UserName = "lisa", PasswordHash = new HMACSHA512().ComputeHash(Encoding.UTF8.GetBytes("1234")), PasswordSalt = new HMACSHA512().Key },
-                new AppUser() { Id = 2, UserName = "karen", PasswordHash = new HMACSHA512().ComputeHash(Encoding.UTF8.GetBytes("1234")), PasswordSalt = new HMACSHA512().Key },
-                new AppUser() { Id = 3, UserName = "margo", PasswordHash = new HMACSHA512().ComputeHash(Encoding.UTF8.GetBytes("1234")), PasswordSalt = new HMACSHA512().Key },
-                new AppUser() { Id = 4, UserName = "lois", PasswordHash = new HMACSHA512().ComputeHash(Encoding.UTF8.GetBytes("1234")), PasswordSalt = new HMACSHA512().Key },
-                new AppUser() { Id = 5, UserName = "ruthie", PasswordHash = new HMACSHA512().ComputeHash(Encoding.UTF8.GetBytes("1234")), PasswordSalt = new HMACSHA512().Key },
-                new AppUser() { Id = 6, UserName = "todd", PasswordHash = new HMACSHA512().ComputeHash(Encoding.UTF8.GetBytes("1234")), PasswordSalt = new HMACSHA512().Key },
-                new AppUser() { Id = 7, UserName = "porter", PasswordHash = new HMACSHA512().ComputeHash(Encoding.UTF8.GetBytes("1234")), PasswordSalt = new HMACSHA512().Key },
-                new AppUser() { Id = 8, UserName = "mayo", PasswordHash = new HMACSHA512().ComputeHash(Encoding.UTF8.GetBytes("1234")), PasswordSalt = new HMACSHA512().Key },
-                new AppUser() { Id = 9, UserName = "skinner", PasswordHash = new HMACSHA512().ComputeHash(Encoding.UTF8.GetBytes("1234")), PasswordSalt = new HMACSHA512().Key },
-                new AppUser() { Id = 10, UserName = "david", PasswordHash = new HMACSHA512().ComputeHash(Encoding.UTF8.GetBytes("1234")), PasswordSalt = new HMACSHA512().Key }
-            );
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<AppUser>()
+                .HasMany(ur => ur.UserRoles)
+                .WithOne(u => u.User)
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
+
+            modelBuilder.Entity<AppRole>()
+                .HasMany(ur => ur.UserRoles)
+                .WithOne(u => u.Role)
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
+
             modelBuilder.Entity<UserLike>()
                 .HasKey(k => new { k.SourceUserId, k.TargetUserId });
 
@@ -58,7 +63,7 @@ namespace API.Data
                 .WithMany(m => m.MessageSent)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            base.OnModelCreating(modelBuilder);
+            
         }
 
     }
