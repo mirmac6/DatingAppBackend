@@ -20,7 +20,7 @@ namespace API.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddDbContext<DataContext>(options =>
-                    options.UseSqlServer(ConfigurationExtensions.GetConnectionString(config, "AppConnectionString")));
+                    options.UseNpgsql(ConfigurationExtensions.GetConnectionString(config, "AppConnectionString")));
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<LogUserActivity>();
