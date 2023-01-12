@@ -27,7 +27,6 @@ namespace API
     public class Startup
     {
         private readonly IConfiguration _config;
-
         public Startup(IConfiguration config)
         {
             
@@ -38,6 +37,32 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationServices(_config);
+        //    var connString = "";
+        //    if (env.IsDevelopment())
+        //    {
+        //        connString = ConfigurationExtensions.GetConnectionString(_config, "AppConnectionString");
+        //    }
+        //    else
+        //    {
+        //        // Use connection string provided at runtime by fly.io.
+        //        var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+        //        // Parse connection URL to connection string for Npgsql
+        //        connUrl = connUrl.Replace("postgres://", string.Empty);
+        //        var pgUserPass = connUrl.Split("@")[0];
+        //        var pgHostPortDb = connUrl.Split("@")[1];
+        //        var pgHostPort = pgHostPortDb.Split("/")[0];
+        //        var pgDb = pgHostPortDb.Split("/")[1];
+        //        var pgUser = pgUserPass.Split(":")[0];
+        //        var pgPass = pgUserPass.Split(":")[1];
+        //        var pgHost = pgHostPort.Split(":")[0];
+        //        var pgPort = pgHostPort.Split(":")[1];
+
+        //        connString = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};";
+        //}
+        //services.AddDbContext<DataContext>(options =>
+        //options.UseNpgsql(connString));
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -57,7 +82,9 @@ namespace API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
 
-            context.Database.ExecuteSqlRaw("DELETE FROM [Connections]");
+            //context.Database.ExecuteSqlRaw("DELETE FROM [Connections]");
+            context.Connections.RemoveRange(context.Connections);
+            context.SaveChanges();
 
             app.UseMiddleware<ExceptionMiddleware>();
 
@@ -73,6 +100,9 @@ namespace API
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             //app.UseEndpoints(endpoints =>
             //{
             //    endpoints.MapHub<PresenceHub>("hubs/presence");
@@ -83,6 +113,7 @@ namespace API
                 endpoints.MapControllers();
                 endpoints.MapHub<PresenceHub>("hubs/presence"); // dodato za signalR
                 endpoints.MapHub<MessageHub>("hubs/message"); // dodato za signalR
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }
