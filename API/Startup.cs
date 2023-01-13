@@ -37,31 +37,31 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationServices(_config);
-        //    var connString = "";
-        //    if (env.IsDevelopment())
-        //    {
-        //        connString = ConfigurationExtensions.GetConnectionString(_config, "AppConnectionString");
-        //    }
-        //    else
-        //    {
-        //        // Use connection string provided at runtime by fly.io.
-        //        var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+            //var connString = "";
+            //if (_env.IsDevelopment())
+            //{
+            //    connString = ConfigurationExtensions.GetConnectionString(_config, "AppConnectionString");
+            //}
+            //else
+            //{
+            //    // Use connection string provided at runtime by fly.io.
+            //    var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
-        //        // Parse connection URL to connection string for Npgsql
-        //        connUrl = connUrl.Replace("postgres://", string.Empty);
-        //        var pgUserPass = connUrl.Split("@")[0];
-        //        var pgHostPortDb = connUrl.Split("@")[1];
-        //        var pgHostPort = pgHostPortDb.Split("/")[0];
-        //        var pgDb = pgHostPortDb.Split("/")[1];
-        //        var pgUser = pgUserPass.Split(":")[0];
-        //        var pgPass = pgUserPass.Split(":")[1];
-        //        var pgHost = pgHostPort.Split(":")[0];
-        //        var pgPort = pgHostPort.Split(":")[1];
+            //    // Parse connection URL to connection string for Npgsql
+            //    connUrl = connUrl.Replace("postgres://", string.Empty);
+            //    var pgUserPass = connUrl.Split("@")[0];
+            //    var pgHostPortDb = connUrl.Split("@")[1];
+            //    var pgHostPort = pgHostPortDb.Split("/")[0];
+            //    var pgDb = pgHostPortDb.Split("/")[1];
+            //    var pgUser = pgUserPass.Split(":")[0];
+            //    var pgPass = pgUserPass.Split(":")[1];
+            //    var pgHost = pgHostPort.Split(":")[0];
+            //    var pgPort = pgHostPort.Split(":")[1];
 
-        //        connString = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};";
-        //}
-        //services.AddDbContext<DataContext>(options =>
-        //options.UseNpgsql(connString));
+            //    connString = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};";
+            //}
+            //services.AddDbContext<DataContext>(options =>
+            //options.UseNpgsql(connString));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
