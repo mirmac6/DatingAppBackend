@@ -1,6 +1,6 @@
-# fly.toml file generated for mirko-portfolio-dating-app on 2023-01-12T01:52:09+01:00
+# fly.toml file generated for aged-violet-6616 on 2023-01-13T15:14:04+01:00
 
-app = "mirko-portfolio-dating-app"
+app = "aged-violet-6616"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
